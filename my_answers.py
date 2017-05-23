@@ -46,19 +46,33 @@ def build_part1_RNN(step_size, window_size):
     model.compile(loss='mean_squared_error', optimizer=optimizer)
 
 ### TODO: list all unique characters in the text and remove any non-english ones
+
+import re
 def clean_text(text):
+
     # find all unique characters in the text
+    chars=sorted(list(set(text)))
 
+    # remove as many non-english characters and character sequences as you can
+    # use the regex substitue function and remove all characters except those listed in
+    # the regex expression
+    text = re.sub(r'[^a-zA-Z.,?!;:\']', ' ',text)
 
-    # remove as many non-english characters and character sequences as you can 
-
+    # shorten any extra dead space created above
+    text = text.replace('  ',' ')
+    return text
 
 ### TODO: fill out the function below that transforms the input text and window-size into a set of input/output pairs for use with our RNN model
 def window_transform_text(text,window_size,step_size):
     # containers for input/output pairs
     inputs = []
     outputs = []
-    
 
-    
+    # step through and pick up the input text string of window_size characteres, and its corresponding output 'next' character
+    # then step through all the text based on the input step size until all input/output pairs are collected
+
+    for i in range(0,len(text)-window_size-step_size,step_size):
+        inputs.append(text[i:i+window_size])
+        outputs.append(text[i+window_size])
+
     return inputs,outputs
